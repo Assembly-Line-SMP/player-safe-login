@@ -26,7 +26,7 @@ public class MySQLStorage implements StorageProvider {
                             "password_hash CHAR(64) NOT NULL)"
             );
         } catch (SQLException e) {
-            throw new RuntimeException("Falha na inicialização do MySQL", e);
+            throw new RuntimeException("Failed to initialize MySQL", e);
         }
     }
 

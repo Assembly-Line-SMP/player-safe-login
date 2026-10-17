@@ -22,13 +22,13 @@ public class PlayerSafeLoginConfig {
         public final ModConfigSpec.ConfigValue<String> sqlitePath;
 
         public ServerConfig(ModConfigSpec.Builder builder) {
-            builder.comment("Configurações do servidor").push("server");
+            builder.comment("Server Config").push("server");
 
             storageType = builder
-                    .comment("Tipo de armazenamento")
+                    .comment("Storage type")
                     .defineEnum("storageType", StorageType.FILE);
 
-            builder.comment("Configurações do MySQL").push("mysql");
+            builder.comment("MySQL config").push("mysql");
             mysqlHost = builder.define("host", "localhost");
             mysqlPort = builder.defineInRange("port", 3306, 1, 65535);
             mysqlUser = builder.define("user", "root");
@@ -36,7 +36,7 @@ public class PlayerSafeLoginConfig {
             mysqlDbName = builder.define("database", "safelogin");
             builder.pop();
 
-            builder.comment("Configurações do SQLite").push("sqlite");
+            builder.comment("SQLite config").push("sqlite");
             sqlitePath = builder.define("path", "./safelogin/safelogin.db");
             builder.pop();
 

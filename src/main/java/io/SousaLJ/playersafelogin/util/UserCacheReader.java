@@ -24,7 +24,7 @@ public class UserCacheReader {
                     .map(CachedUser::getName)
                     .collect(Collectors.toList());
         } catch (Exception e) {
-            PlayerSafeLogin.LOGGER.error("Erro ao ler usercache.json", e);
+            PlayerSafeLogin.LOGGER.error("Failed to read usercache.json", e);
             return List.of();
         }
     }

@@ -16,7 +16,7 @@ public class FileStorage implements StorageProvider {
         try {
             Files.createDirectories(storagePath);
         } catch (IOException e) {
-            throw new RuntimeException("Falha ao criar diretório de armazenamento", e);
+            throw new RuntimeException("Failed to create storage directory", e);
         }
     }
 

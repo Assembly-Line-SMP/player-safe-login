@@ -22,7 +22,7 @@ public class SQLiteStorage implements StorageProvider {
                             "password_hash TEXT NOT NULL)"
             );
         } catch (SQLException e) {
-            throw new RuntimeException("Falha na inicialização do SQLite", e);
+            throw new RuntimeException("Failed to initialize SQLite database", e);
         }
     }
 

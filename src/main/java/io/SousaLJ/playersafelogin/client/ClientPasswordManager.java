@@ -13,7 +13,7 @@ import java.security.SecureRandom;
 import java.io.IOException;
 
 /**
- * Classe responsável por gerenciar a senha do jogador no cliente.
+ * Responsible for managing the player's password on client side.
  */
 public class ClientPasswordManager {
 
@@ -21,15 +21,14 @@ public class ClientPasswordManager {
     private static final SecureRandom RANDOM = new SecureRandom();
 
     /**
-     * Salva o hash da senha no arquivo local.
-     * @param hash Hash da senha em formato hexadecimal.
-     * @param password Senha original (para validação futura se necessário).
+     * Saves the password hash to the local file.
+     * @param hash Password hash in hexadecimal format.
+     * @param password Original password (for future validation if needed).
      */
     public static boolean savePassword(String hash, String password) {
         try {
             if(validatePassword(password, hash)) {
                 Files.writeString(PASSWORD_FILE, hash, StandardCharsets.UTF_8);
-                PlayerSafeLogin.LOGGER.info("Senha salva com sucesso.");
                 return true;
             } else {
                 PlayerSafeLogin.LOGGER.error(Component.translatable("playersafelogin.gui.invalid_password_hash") + ": " + password);
@@ -37,14 +36,14 @@ public class ClientPasswordManager {
             }
 
         } catch (IOException e) {
-            PlayerSafeLogin.LOGGER.error("Erro ao salvar senha: ", e);
+            PlayerSafeLogin.LOGGER.error("Failed to save password: ", e);
             return false;
         }
     }
 
     /**
-     * Carrega a senha salva (hash) do arquivo.
-     * @return Hash da senha se existir, ou null se não existir.
+     * Loads the saved password (hash) from the file.
+     * @return Password hash if it exists, or null if it doesn't.
      */
     public static String loadPassword() {
         try {
@@ -52,7 +51,7 @@ public class ClientPasswordManager {
                 return Files.readString(PASSWORD_FILE, StandardCharsets.UTF_8).trim();
             }
         } catch (IOException e) {
-            PlayerSafeLogin.LOGGER.error("Erro ao carregar senha: ", e);
+            PlayerSafeLogin.LOGGER.error("Failed to load password: ", e);
         }
         return null;
     }
@@ -63,16 +62,16 @@ public class ClientPasswordManager {
     }
 
     /**
-     * Verifica se existe uma senha salva.
-     * @return True se o arquivo de senha existe.
+     * Checks if there is a saved password.
+     * @return True if the password file exists.
      */
     public static boolean hasSavedPassword() {
         return Files.exists(PASSWORD_FILE);
     }
 
     /**
-     * Gera uma senha aleatória respeitando os limites de tamanho definidos.
-     * @return Uma senha aleatória segura.
+     * Generates a random password respecting the defined length limits.
+     * @return A secure random password.
      */
     public static String generateRandomPassword() {
         int length = RANDOM.nextInt(SecurityConstants.MAX_PASSWORD_LENGTH - SecurityConstants.MIN_PASSWORD_LENGTH + 1) + SecurityConstants.MIN_PASSWORD_LENGTH;
@@ -85,9 +84,9 @@ public class ClientPasswordManager {
     }
 
     /**
-     * Gera o hash SHA-256 de uma senha.
-     * @param password Senha original.
-     * @return Hash SHA-256 em formato hexadecimal.
+     * Generates the SHA-256 hash of a password.
+     * @param password Original password.
+     * @return SHA-256 hash in hexadecimal format.
      */
     public static String hashPassword(String password) {
         try {
@@ -95,7 +94,7 @@ public class ClientPasswordManager {
             byte[] encodedHash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
             return bytesToHex(encodedHash);
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("SHA-256 não disponível!", e);
+            throw new RuntimeException("SHA-256 not available!", e);
         }
     }
 
@@ -113,9 +112,9 @@ public class ClientPasswordManager {
     public static void deleteSavedPassword() {
         try {
             Files.deleteIfExists(PASSWORD_FILE);
-            PlayerSafeLogin.LOGGER.info("Senha local deletada.");
+            PlayerSafeLogin.LOGGER.info("Local password deleted.");
         } catch (IOException e) {
-            PlayerSafeLogin.LOGGER.error("Erro ao deletar senha local: ", e);
+            PlayerSafeLogin.LOGGER.error("Failed to delete local password: ", e);
         }
     }
 }

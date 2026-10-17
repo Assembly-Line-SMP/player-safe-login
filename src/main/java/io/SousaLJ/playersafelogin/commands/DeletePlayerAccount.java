@@ -43,7 +43,7 @@ public class DeletePlayerAccount implements Command<CommandSourceStack> {
 
 
     /**
-     * Deleta o regitro de senha do player em caso de perda de senha.
+     * Delete the player's password record in case the password is lost.
      */
     @Override
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {

@@ -24,7 +24,7 @@ public record PasswordAutenticationPayload(UUID playerId, String hashedPassword)
      */
 
     private static final Map<UUID, Long> recentFailedAttempts = new HashMap<>();
-    private static final long COOLDOWN_MILLIS = 10_000; // 10 segundos
+    private static final long COOLDOWN_MILLIS = 10_000; // 10 seconds
 
     public static final CustomPacketPayload.Type<PasswordAutenticationPayload> TYPE = new Type<>(
             PlayerSafeLogin.rl("login_password_register")
@@ -58,19 +58,19 @@ public record PasswordAutenticationPayload(UUID playerId, String hashedPassword)
 
                     if (serverPlayer != null) {
                         /*
-                        * Início do registro do log de tentativas de login
+                        * Start of login attempt log registration
                         * */
                         String playerName = serverPlayer.getGameProfile().getName();
                         String uuid = serverPlayer.getUUID().toString();
                         String ip = context.connection().getRemoteAddress().toString();
                         AuthLog.logFailedAttempt(playerName, uuid, ip);
                         /*
-                        * Fim do registro do log de tentativas de login
+                        * End of login attempt log registration
                         * */
 
                         serverPlayer.connection.disconnect(Component.translatable("playersafelogin.kick.invalid_password"));
                     } else {
-                        PlayerSafeLogin.LOGGER.error("Jogador nulo ao tentar desconectar por senha inválida.");
+                        PlayerSafeLogin.LOGGER.error("Null player when trying to disconnect for invalid password.");
                     }
                 } else {
                     PlayerSafeLogin.LOGGER.info("Password validated for player: " + playerId);

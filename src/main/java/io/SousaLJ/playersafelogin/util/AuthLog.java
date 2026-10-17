@@ -22,7 +22,7 @@ public class AuthLog {
             }
         } catch (IOException e) {
             // fallback para log padrão do mod
-            io.SousaLJ.playersafelogin.PlayerSafeLogin.LOGGER.error("Erro ao escrever tentativa de login no log:", e);
+            io.SousaLJ.playersafelogin.PlayerSafeLogin.LOGGER.error("Failed to write login attempt to log: ", e);
         }
     }
 }

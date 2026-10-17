@@ -1,0 +1,17 @@
+{
+  "playersafelogin.gui.setup_title": "Setup",
+  "playersafelogin.gui.new_password": "Nowe hasło",
+  "playersafelogin.gui.master_password": "Główne hasło",
+  "playersafelogin.gui.confirm": "Potwierdź hasło",
+  "playersafelogin.gui.unlock": "Odblokuj",
+  "playersafelogin.gui.random_password": "Losowe",
+  "playersafelogin.gui.save_password": "Zapisz hasło",
+  "playersafelogin.kick.invalid_password": "Nieprawidłowe hasło! Skontaktuj się z administratorem serwera.",
+  "playersafelogin.gui.login_title": "Player Safe Login",
+  "playersafelogin.gui.login_subtitle": "Wpisz hasło lub użyj losowego hasła. (min. 8 ; max. 32).",
+  "playersafelogin.command.reset_password.not_player": "Musisz być graczem, aby użyć tej komendy.",
+  "playersafelogin.command.delete_account.player_not_found": "Nie znaleziono gracza.",
+  "playersafelogin.command.delete_account.success": "Rejestracja gracza została pomyślnie usunięta.",
+  "playersafelogin.command.reset_password.success": "Hasło zostało pomyślnie zresetowane.",
+  "playersafelogin.gui.invalid_password_hash": "Nieprawidłowy hash hasła. Skontaktuj się z administratorem serwera."
+}
