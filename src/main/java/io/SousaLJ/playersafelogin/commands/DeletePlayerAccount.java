@@ -25,10 +25,10 @@ public class DeletePlayerAccount implements Command<CommandSourceStack> {
                                         && player.hasPermissions(2))
                                 .then(Commands.argument("playerName", StringArgumentType.string())
                                         .suggests((context, builder) -> {
-                                            final List<String> nomes = UserCacheReader.getCachedPlayerNames();
-                                            for (String nome : nomes) {
-                                                if (nome.toLowerCase().startsWith(builder.getRemaining().toLowerCase())) {
-                                                    builder.suggest(nome);
+                                            final List<String> names = UserCacheReader.getCachedPlayerNames();
+                                            for (String name : names) {
+                                                if (name.toLowerCase().startsWith(builder.getRemaining().toLowerCase())) {
+                                                    builder.suggest(name);
                                                 }
                                             }
                                             return builder.buildFuture();
