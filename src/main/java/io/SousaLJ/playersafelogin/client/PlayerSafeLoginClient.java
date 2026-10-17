@@ -3,7 +3,7 @@ package io.SousaLJ.playersafelogin.client;
 import io.SousaLJ.playersafelogin.PlayerSafeLogin;
 import io.SousaLJ.playersafelogin.client.gui.PasswordScreen;
 import io.SousaLJ.playersafelogin.network.PlayerSafeLoginPacketHandler;
-import io.SousaLJ.playersafelogin.network.payloads.PasswordAutenticationPayload;
+import io.SousaLJ.playersafelogin.network.payloads.PasswordAuthenticationPayload;
 import net.minecraft.client.gui.screens.Screen;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -37,7 +37,7 @@ public class PlayerSafeLoginClient {
     public void onPlayerJoin(ClientPlayerNetworkEvent.LoggingIn event) {
         if(ClientPasswordManager.hasSavedPassword()){
             String storedHash = ClientPasswordManager.loadPassword();
-            PasswordAutenticationPayload payload = new PasswordAutenticationPayload(event.getPlayer().getUUID(), storedHash);
+            PasswordAuthenticationPayload payload = new PasswordAuthenticationPayload(event.getPlayer().getUUID(), storedHash);
             PlayerSafeLoginPacketHandler.sendToServer(payload);
             PlayerSafeLogin.LOGGER.info("Sending password to server");
         }

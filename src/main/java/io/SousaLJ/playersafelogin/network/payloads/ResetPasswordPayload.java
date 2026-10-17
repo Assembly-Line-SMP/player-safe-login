@@ -37,7 +37,7 @@ public record ResetPasswordPayload(UUID playerId, String newPassword) implements
             ClientPasswordManager.deleteSavedPassword();
             String hashedPassword = ClientPasswordManager.hashPassword(newPassword);
             ClientPasswordManager.savePassword(hashedPassword, this.newPassword);
-            PasswordAutenticationPayload payload = new PasswordAutenticationPayload(playerId, hashedPassword);
+            PasswordAuthenticationPayload payload = new PasswordAuthenticationPayload(playerId, hashedPassword);
             PlayerSafeLoginPacketHandler.sendToServer(payload);
         });
     }

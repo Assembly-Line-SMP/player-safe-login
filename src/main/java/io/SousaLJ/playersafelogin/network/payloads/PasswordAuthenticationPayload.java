@@ -10,7 +10,6 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public record PasswordAutenticationPayload(UUID playerId, String hashedPassword) implements IPlayerSafeLoginPacket {
+public record PasswordAuthenticationPayload(UUID playerId, String hashedPassword) implements IPlayerSafeLoginPacket {
     /**
      * The type of the packet.
      */
@@ -26,22 +25,22 @@ public record PasswordAutenticationPayload(UUID playerId, String hashedPassword)
     private static final Map<UUID, Long> recentFailedAttempts = new HashMap<>();
     private static final long COOLDOWN_MILLIS = 10_000; // 10 seconds
 
-    public static final CustomPacketPayload.Type<PasswordAutenticationPayload> TYPE = new Type<>(
+    public static final CustomPacketPayload.Type<PasswordAuthenticationPayload> TYPE = new Type<>(
             PlayerSafeLogin.rl("login_password_register")
     );
 
 
-    public static final StreamCodec<FriendlyByteBuf, PasswordAutenticationPayload> STREAM_CODEC = StreamCodec.composite(
+    public static final StreamCodec<FriendlyByteBuf, PasswordAuthenticationPayload> STREAM_CODEC = StreamCodec.composite(
             UUIDUtil.STREAM_CODEC,
-            PasswordAutenticationPayload::playerId,
+            PasswordAuthenticationPayload::playerId,
             ByteBufCodecs.STRING_UTF8,
-            PasswordAutenticationPayload::hashedPassword,
-            PasswordAutenticationPayload::new
+            PasswordAuthenticationPayload::hashedPassword,
+            PasswordAuthenticationPayload::new
     );
 
     @NotNull
     @Override
-    public CustomPacketPayload.Type<PasswordAutenticationPayload> type() {
+    public CustomPacketPayload.Type<PasswordAuthenticationPayload> type() {
         return TYPE;
     }
 

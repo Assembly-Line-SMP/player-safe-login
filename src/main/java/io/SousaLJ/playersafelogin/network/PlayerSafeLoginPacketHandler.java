@@ -1,6 +1,6 @@
 package io.SousaLJ.playersafelogin.network;
 
-import io.SousaLJ.playersafelogin.network.payloads.PasswordAutenticationPayload;
+import io.SousaLJ.playersafelogin.network.payloads.PasswordAuthenticationPayload;
 import io.SousaLJ.playersafelogin.network.payloads.ResetPasswordPayload;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,7 +16,7 @@ public class PlayerSafeLoginPacketHandler extends BasePacketHandler {
 
     @Override
     protected void registerClientToServer(PacketRegistrar registrar) {
-        registrar.play( PasswordAutenticationPayload.TYPE, PasswordAutenticationPayload.STREAM_CODEC );
+        registrar.play( PasswordAuthenticationPayload.TYPE, PasswordAuthenticationPayload.STREAM_CODEC );
     }
 
     @Override
