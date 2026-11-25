@@ -17,7 +17,60 @@ import java.io.IOException;
  */
 public class ClientPasswordManager {
 
-    private static final Path PASSWORD_FILE = Minecraft.getInstance().gameDirectory.toPath().resolve("player_safelogin.dat");
+    private static final String FILE_NAME = "player_safelogin.dat";
+    private static final String DIR_NAME = "PlayerSafeLogin";
+    private static final Path LEGACY_FILE = Minecraft.getInstance().gameDirectory.toPath().resolve(FILE_NAME);
+    private static final Path PASSWORD_FILE = resolvePasswordFile();
+
+    /**
+     * Picks an instance-independent, writable location. Order: XDG data dir (Flatpak remaps it to
+     * a persistent per-app dir), platform default under user.home (also covers Pojav/Mojo on Android,
+     * where user.home is the shared launcher home), then the game directory as a last resort.
+     */
+    private static Path resolvePasswordFile() {
+        String os = System.getProperty("os.name", "").toLowerCase(java.util.Locale.ROOT);
+        java.util.List<Path> bases = new java.util.ArrayList<>();
+        String home = System.getProperty("user.home");
+        if (os.contains("win")) {
+            addBase(bases, System.getenv("APPDATA"));
+            if (home != null) bases.add(Path.of(home, "AppData", "Roaming"));
+        } else if (os.contains("mac")) {
+            if (home != null) bases.add(Path.of(home, "Library", "Application Support"));
+        } else {
+            addBase(bases, System.getenv("XDG_DATA_HOME"));
+            if (home != null) bases.add(Path.of(home, ".local", "share"));
+        }
+        for (Path base : bases) {
+            try {
+                Path dir = base.resolve(DIR_NAME);
+                Files.createDirectories(dir);
+                if (Files.isWritable(dir)) {
+                    Path file = dir.resolve(FILE_NAME);
+                    migrateLegacy(file);
+                    return file;
+                }
+            } catch (IOException | RuntimeException ignored) {
+            }
+        }
+        PlayerSafeLogin.LOGGER.warn("No instance-independent directory available, using the game directory.");
+        return LEGACY_FILE;
+    }
+
+    private static void addBase(java.util.List<Path> bases, String value) {
+        if (value != null && !value.isBlank()) bases.add(Path.of(value));
+    }
+
+    private static void migrateLegacy(Path target) {
+        try {
+            if (!Files.exists(target) && Files.exists(LEGACY_FILE)) {
+                Files.copy(LEGACY_FILE, target);
+                Files.deleteIfExists(LEGACY_FILE);
+                PlayerSafeLogin.LOGGER.info("Migrated saved password to {}", target);
+            }
+        } catch (IOException e) {
+            PlayerSafeLogin.LOGGER.error("Failed to migrate saved password: ", e);
+        }
+    }
     private static final SecureRandom RANDOM = new SecureRandom();
 
     /**
@@ -112,6 +165,7 @@ public class ClientPasswordManager {
     public static void deleteSavedPassword() {
         try {
             Files.deleteIfExists(PASSWORD_FILE);
+            Files.deleteIfExists(LEGACY_FILE);
             PlayerSafeLogin.LOGGER.info("Local password deleted.");
         } catch (IOException e) {
             PlayerSafeLogin.LOGGER.error("Failed to delete local password: ", e);
