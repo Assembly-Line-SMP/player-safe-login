@@ -19,7 +19,6 @@ public class PlayerSafeLoginClient {
     public static boolean passwordScreenCompleted = ClientPasswordManager.hasSavedPassword();
 
     public PlayerSafeLoginClient(IEventBus modBus) {
-        PlayerSafeLogin.LOGGER.info("PlayerSafeLogin Client Initialized");
         // Register the event bus
         NeoForge.EVENT_BUS.register(this);
     }
@@ -39,7 +38,6 @@ public class PlayerSafeLoginClient {
             String storedHash = ClientPasswordManager.loadPassword();
             PasswordAuthenticationPayload payload = new PasswordAuthenticationPayload(event.getPlayer().getUUID(), storedHash);
             PlayerSafeLoginPacketHandler.sendToServer(payload);
-            PlayerSafeLogin.LOGGER.info("Sending password to server");
         }
     }
 }
