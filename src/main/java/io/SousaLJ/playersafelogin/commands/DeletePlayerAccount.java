@@ -9,9 +9,9 @@ import io.SousaLJ.playersafelogin.util.UserCacheReader;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
+import java.util.Objects;
 
 public class DeletePlayerAccount implements Command<CommandSourceStack> {
 
@@ -20,9 +20,7 @@ public class DeletePlayerAccount implements Command<CommandSourceStack> {
         dispatcher.register(
                 Commands.literal("playersafelogin")
                         .then(Commands.literal("deleteaccount")
-                                .requires(source -> source.hasPermission(2)
-                                        && source.getEntity() instanceof ServerPlayer player
-                                        && player.hasPermissions(2))
+                                .requires(source -> source.hasPermission(2))
                                 .then(Commands.argument("playerName", StringArgumentType.string())
                                         .suggests((context, builder) -> {
                                             final List<String> names = UserCacheReader.getCachedPlayerNames();
@@ -46,14 +44,13 @@ public class DeletePlayerAccount implements Command<CommandSourceStack> {
     @Override
     public int run(CommandContext<CommandSourceStack> context){
         String playerName = context.getArgument("playerName", String.class);
-        ServerPlayer player = context.getSource().getServer().getPlayerList().getPlayerByName(playerName);
-        if (player == null) {
-            context.getSource().sendFailure(Component.translatable("playersafelogin.command.delete_account.player_not_found"));
-            return 0;
-        } else {
-            PlayerSafeLogin.getStorage().resetPassword(player.getUUID());
-            context.getSource().sendSystemMessage(Component.translatable("playersafelogin.command.delete_account.success"));
-            return 1;
-        }
+        Objects.requireNonNull(context.getSource().getServer().getProfileCache()).get(playerName).ifPresentOrElse(
+                gameProfile -> {
+                    PlayerSafeLogin.getStorage().resetPassword(gameProfile.getId());
+                    context.getSource().sendSystemMessage(Component.translatable("playersafelogin.command.delete_account.success"));
+                },
+                () -> context.getSource().sendFailure(Component.translatable("playersafelogin.command.delete_account.player_not_found"))
+        );
+        return 1;
     }
 }

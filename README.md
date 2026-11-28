@@ -18,7 +18,7 @@
 ## 🛠 Commands
 
 - `/playersafelogin deleteaccount <player>` – Deletes a player's password record (admin only)
-- `/playersafelogin resetpassword <new password>` – Changes local password and sync wyth server (must be connected to server)
+- `/playersafelogin resetpassword <new password>` – Changes local password and sync with server (must be connected to server)
 
 ## ⚙ Requirements
 
